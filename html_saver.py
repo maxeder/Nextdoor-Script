@@ -29,23 +29,23 @@ capa = DesiredCapabilities.CHROME
 capa["pageLoadStrategy"] = "none"
 
 # Set up driver
-driver = webdriver.Chrome(desired_capabilities=capa, executable_path=os.getenv("chromedriver_path"))
+driver = webdriver.Chrome()
 driver.get("https://nextdoor.com/login/")
 
 time.sleep(10)
 
 # Log In
-username = driver.find_element_by_id("id_email")
-password = driver.find_element_by_id("id_password")
+username = driver.find_element("id","id_email")
+password = driver.find_element("id","id_password")
 
 username.send_keys(os.getenv("email")) # Retrieved from .env file
 password.send_keys(os.getenv("password")) # Retrieved from .env file
-driver.find_element_by_xpath('//button[@id="signin_button"]').click()
-time.sleep(10) # if not scrolling in time, make this number larger
+driver.find_element("xpath",'//button[@id="signin_button"]').click()
+time.sleep(45) # if not scrolling in time, make this number larger
 
 # Click the pop up, if one appears
 try:
-	driver.find_element_by_xpath("//button[@class='channels-bulk-join-close-button']").click()
+	driver.find_element("xpath","//button[@class='channels-bulk-join-close-button']").click()
 except:
 	pass
 
@@ -57,7 +57,7 @@ for i in range(1, 11):
 	time.sleep(random.randint(3, 6))
 
 	# Find all "previous comments and replies"
-	numberOfElementsFound = driver.find_elements_by_xpath('//button[contains(@class, "see-previous-comments-button-paged")]')
+	numberOfElementsFound = driver.find_elements("xpath",'//button[contains(@class, "see-previous-comments-button-paged")]')
 
 	# Scroll to top to avoid "Unable to click element" error
 	if (i == 1):
@@ -74,7 +74,7 @@ for i in range(1, 11):
 				pass
 
 	# Click on "see more" to view full reply
-	numberOfElementsFound = driver.find_elements_by_xpath('//a[@class="truncate-view-more-link"]')
+	numberOfElementsFound = driver.find_elements("xpath",'//a[@class="truncate-view-more-link"]')
 	for pos in range (0, len(numberOfElementsFound)):
 		if (numberOfElementsFound[pos].is_displayed()):
 			try:
